@@ -15,6 +15,7 @@ export const Experience = () => {
         "ShieldBlock",
         "ShieldImpact",
         "ShieldTurn",
+        "Slash",
       ]
     },
     headFollow: false,

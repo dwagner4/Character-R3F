@@ -26,6 +26,8 @@ export function Knight(props) {
   shieldblockAnimation[0].name ="ShieldBlock";
   const { animations: shieldturnAnimation } = useFBX("animations/ShieldTurn.fbx")
   shieldturnAnimation[0].name ="ShieldTurn";
+  const { animations: slashAnimation } = useFBX("animations/Slash.fbx")
+  slashAnimation[0].name ="Slash";
 
   const { actions } = useAnimations([
                                         runningAnimation[0], 
@@ -34,8 +36,10 @@ export function Knight(props) {
                                         impactAnimation[0], 
                                         shieldimpactAnimation[0],
                                         shieldblockAnimation[0],
-                                        shieldturnAnimation[0]
-                                    ], group);
+                                        shieldturnAnimation[0],
+                                        slashAnimation[0]
+                                    ], 
+    group);
 
   useFrame((state) => {
     if(headfollow) {
