@@ -7,7 +7,15 @@ export const Experience = () => {
   const {animation, headFollow, cursorFollow, wireframe} = useControls({
     animation: {
       value: "Run",
-      options: ["Run", "Falling", "Standing"]
+      options: [
+        "Run", 
+        "BackRun", 
+        "Jump",
+        "Impact",
+        "ShieldBlock",
+        "ShieldImpact",
+        "ShieldTurn",
+      ]
     },
     headFollow: false,
     cursorFollow: false,

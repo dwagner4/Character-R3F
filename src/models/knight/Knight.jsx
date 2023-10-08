@@ -8,16 +8,34 @@ import { useGLTF, useFBX, useAnimations } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 export function Knight(props) {
-    const {animation, headfollow, cursorfollow, wireframe} = props;
-    console.log(animation, headfollow, cursorfollow, wireframe)
+  const {animation, headfollow, cursorfollow, wireframe} = props;
   const group = useRef();
   const { nodes, materials, animations } = useGLTF("models/knightTPose.glb");
 
   const { animations: runningAnimation } = useFBX("animations/Run.fbx")
-
   runningAnimation[0].name ="Run";
+  const { animations: backrunningAnimation } = useFBX("animations/BackRun.fbx")
+  backrunningAnimation[0].name ="BackRun";
+  const { animations: jumpAnimation } = useFBX("animations/Jump.fbx")
+  jumpAnimation[0].name ="Jump";
+  const { animations: impactAnimation } = useFBX("animations/Impact.fbx")
+  impactAnimation[0].name ="Impact";
+  const { animations: shieldimpactAnimation } = useFBX("animations/ShieldImpact.fbx")
+  shieldimpactAnimation[0].name ="ShieldImpact";
+  const { animations: shieldblockAnimation } = useFBX("animations/ShieldBlock.fbx")
+  shieldblockAnimation[0].name ="ShieldBlock";
+  const { animations: shieldturnAnimation } = useFBX("animations/ShieldTurn.fbx")
+  shieldturnAnimation[0].name ="ShieldTurn";
 
-  const { actions } = useAnimations([runningAnimation[0]], group);
+  const { actions } = useAnimations([
+                                        runningAnimation[0], 
+                                        backrunningAnimation[0], 
+                                        jumpAnimation[0], 
+                                        impactAnimation[0], 
+                                        shieldimpactAnimation[0],
+                                        shieldblockAnimation[0],
+                                        shieldturnAnimation[0]
+                                    ], group);
 
   useFrame((state) => {
     if(headfollow) {
