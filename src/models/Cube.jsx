@@ -10,9 +10,6 @@ export const Cube = ({position, tag, fsm, friend}) => {
     const friendRef = AppContext.useSelector((state) => state.context[friend])
     const fsmRef = AppContext.useSelector((state) => state.context[fsm])
 
-    console.log(fsmRef.state.context)
-    // const cubeActor = fsmRef.useActor()
-
     const cube = useRef()
 
     useFrame((state, delta) => {
@@ -29,7 +26,7 @@ export const Cube = ({position, tag, fsm, friend}) => {
     return (
         <mesh onClick={clickhandler} ref={cube} position={position}>
           <meshNormalMaterial />
-          <boxBufferGeometry />
+          <boxGeometry />
         </mesh>
     );
 };

@@ -10,8 +10,6 @@ import { createActorContext } from '@xstate/react'
 
 export const AppContext = createActorContext(appMachine)
 
-console.log(AppContext)
-
 function App() {
   
   return (
