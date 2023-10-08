@@ -8,7 +8,8 @@ import { useGLTF, useFBX, useAnimations } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 export function Knight(props) {
-    const {animation} = props;
+    const {animation, headfollow, cursorfollow, wireframe} = props;
+    console.log(animation, headfollow, cursorfollow, wireframe)
   const group = useRef();
   const { nodes, materials, animations } = useGLTF("models/knightTPose.glb");
 
@@ -18,12 +19,29 @@ export function Knight(props) {
 
   const { actions } = useAnimations([runningAnimation[0]], group);
 
+  useFrame((state) => {
+    if(headfollow) {
+      group.current.getObjectByName("mixamorigHead").lookAt(state.camera.position);
+    }
+    if (cursorfollow) 
+    {
+      const target = new THREE.Vector3(state.mouse.x, state.mouse.y, 1)
+      group.current.getObjectByName("mixamorigSpine2").lookAt(target);
+    }
+  })
+
   useEffect(() => {
     actions[animation].reset().fadeIn(0.5).play();
     return () => {
       actions[animation].reset().fadeOut(0.5)
     }
   }, [animation])
+
+  useEffect(() => {
+    Object.values(materials).forEach((material) => {
+      material.wireframe = wireframe;
+    })
+  }, [wireframe])
 
   return (
     <group ref={group} {...props} rotation-x={-Math.PI / 2} dispose={null}>

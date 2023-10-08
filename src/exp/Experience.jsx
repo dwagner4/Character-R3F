@@ -4,11 +4,14 @@ import { Knight } from '../models/knight/Knight.jsx'
 import { useControls } from "leva";
 
 export const Experience = () => {
-  const {animation} = useControls({
+  const {animation, headFollow, cursorFollow, wireframe} = useControls({
     animation: {
-      value: "Typing",
-      options: ["Typing", "Falling", "Standing"]
-    }
+      value: "Run",
+      options: ["Run", "Falling", "Standing"]
+    },
+    headFollow: false,
+    cursorFollow: false,
+    wireframe: false,
   })
   return (
     <>
@@ -24,7 +27,7 @@ export const Experience = () => {
         <meshStandardMaterial color="white" />
       </mesh>
        
-      <Knight animation="Run" />
+      <Knight animation={animation} headfollow={headFollow} cursorfollow={cursorFollow} wireframe={wireframe} />
     </>
   );
 };
