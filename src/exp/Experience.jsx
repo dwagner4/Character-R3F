@@ -1,9 +1,8 @@
-import { useThree } from "@react-three/fiber";
-import { Environment, OrbitControls, Sky, ContactShadows } from "@react-three/drei";
+import { Environment, Sky } from "@react-three/drei";
 import { Cube } from '../models/Cube.jsx'
 import { Knight } from '../models/knight/Knight.jsx'
 import { useControls } from "leva";
-import { useEffect, Vector3 } from "react";
+import { FollowCamera } from '../components/FollowCamera.jsx'
 
 export const Experience = () => {
   
@@ -27,19 +26,6 @@ export const Experience = () => {
     Camx: 5,
   })
 
-  const {camera} = useThree();
-  console.log(camera)
-
-  useEffect(() => {
-    console.log(camera)
-    if (camera) {
-      camera.position.set(Camx, 2, 10);
-      camera.lookAt(0,0,0)
-    }
-    
-    
-  }, [Camx])
-
   return (
     <>
       {/* <OrbitControls /> */}
@@ -48,6 +34,7 @@ export const Experience = () => {
       <Sky />
       <Environment preset="sunset" />
       <ambientLight intensity={5} />
+      <FollowCamera camx={Camx} />
       
       <mesh scale={5} rotation-x={-Math.PI * 0.5} position-y={0.001}>
         <planeGeometry />
