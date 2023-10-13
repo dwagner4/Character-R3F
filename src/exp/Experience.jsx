@@ -3,9 +3,12 @@ import { Cube } from '../models/Cube.jsx'
 import { Knight } from '../models/knight/Knight.jsx'
 import { useControls } from "leva";
 import { FollowCamera } from '../components/FollowCamera.jsx'
+import { AppContext } from '../App.jsx'
+import { KeyboardMessenger } from "./KeyboardMessenger.jsx";
+
 
 export const Experience = () => {
-  
+
   const {animation, headFollow, cursorFollow, wireframe, Camx} = useControls({
     animation: {
       value: "Run",
@@ -35,6 +38,8 @@ export const Experience = () => {
       <Environment preset="sunset" />
       <ambientLight intensity={5} />
       <FollowCamera camx={Camx} />
+      <KeyboardMessenger />
+
       
       <mesh scale={5} rotation-x={-Math.PI * 0.5} position-y={0.001}>
         <planeGeometry />

@@ -1,17 +1,20 @@
 import { createMachine, assign, spawn } from 'xstate';
 import { cubeLogic } from './models/Cube.jsx'
+import { keys } from 'xstate/lib/utils.js';
 
 const cubeMachine1 = createMachine( cubeLogic )
 const cubeMachine2 = createMachine( cubeLogic )
 
 export const appMachine = createMachine({
+  predictableActionArguments: true,
   "id": "appMachine",
   "context": {
     "message": "no message",
     "shapeRef1": null,
     "shapRef2": null,
     "count": 0,
-    "color": "#ff8800"
+    "color": "#ff8800",
+    keys: "q",
   },
   "initial": "home",
   "states": {
@@ -54,10 +57,22 @@ export const appMachine = createMachine({
         "type": "toggleColor"
       }
     },
+    "keydown": {
+      "actions": [
+        "changeKey",
+        // "logit"
+      ]
+    },
+    "keyup": {
+      "actions": [
+        "changeKey",
+        // "logit"
+      ]
+    },
     "getSnapShots": {
       "actions": {
         "params": {},
-        "type": "getActorData"
+        "type": "logit"
       }
     }
   }
@@ -66,6 +81,10 @@ export const appMachine = createMachine({
                 "toggleColor": assign({
                   color: ( context, event ) => context.color = context.color == "blue" ? 'red' : "blue"
                 }),
+                "changeKey": assign({
+                  keys: (context, event) => event.key
+                }),
+                "logit": (ctx, e) => console.log(ctx.keys, e)
               },
       actors: {},
       guards: {},

@@ -14,6 +14,7 @@ export function Knight(props) {
 
   const { animations: runningAnimation } = useFBX("animations/Run.fbx")
   runningAnimation[0].name ="Run";
+  // runningAnimation[0].blendMode = THREE.AdditiveAnimationBlendMode;
   const { animations: backrunningAnimation } = useFBX("animations/BackRun.fbx")
   backrunningAnimation[0].name ="BackRun";
   const { animations: jumpAnimation } = useFBX("animations/Jump.fbx")
@@ -28,8 +29,9 @@ export function Knight(props) {
   shieldturnAnimation[0].name ="ShieldTurn";
   const { animations: slashAnimation } = useFBX("animations/Slash.fbx")
   slashAnimation[0].name ="Slash";
+  // slashAnimation[0].blendMode = THREE.AdditiveAnimationBlendMode;
 
-  const { actions } = useAnimations([
+  const { ref, mixer, names, actions, clips } = useAnimations([
                                         runningAnimation[0], 
                                         backrunningAnimation[0], 
                                         jumpAnimation[0], 
@@ -40,6 +42,8 @@ export function Knight(props) {
                                         slashAnimation[0]
                                     ], 
     group);
+
+  console.log(clips)
 
   useFrame((state) => {
     if(headfollow) {
