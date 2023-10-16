@@ -2,37 +2,35 @@ import { useEffect, useState } from "react";
 
 import React, { useContext } from 'react'
 import { AppContext } from '../App.jsx'
+import { useFrame } from "@react-three/fiber";
 
 
 export function KeyboardMessenger() 
 {
-  const [k, setK] = useState("a")
+
     const [ state, send ] = AppContext.useActor()
 
-    useEffect(() => {
-      document.addEventListener('keydown', yoho, true)
-    }, [])
-
-    const yoho = (e) => {
+    const keyDownFunc = (e) => {
         var name = e.key;
-        // console.log(name, k)g
-        if (!name == state.context.keys) {
-          console.log("new K", name, state.context.keys)
-          setK(name)
-          send({ type: "keydown", key:name })
-          
-        } else {
-          console.log("same K", name, state.context.keys)
-        }
-        
+        if (name === "a") {send({ type: "keyA" })}
+        if (name === "d") {send({ type: "keyD" })}
+        if (name === "w") {send({ type: "keyW" })}
+        if (name === "s") {send({ type: "keyS" })}
     };
 
-    document.addEventListener('keyup', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        var name = e.key;
-        send({ type: "keydown", key:name })
-    });
+    useEffect(() => {
+      document.addEventListener('keydown', keyDownFunc, true)
+    }, [])
 
-      return ( <></> )
+    useFrame(() => {
+      // console.log(state.context)
+      if (state.context.keyA > 0 ) { send({ type: "Adown" }) } 
+      if (state.context.keyD > 0 ) { send({ type: "Ddown" }) } 
+      if (state.context.keyW > 0 ) { send({ type: "Wdown" }) } 
+      if (state.context.keyS > 0 ) { send({ type: "Sdown" }) } 
+      // console.log(state.context.keyA, state.context.keyD, state.context.keyW, state.context.keyS,)
+      
+    })
+
+    return ( <></> )
 }

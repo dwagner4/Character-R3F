@@ -14,7 +14,10 @@ export const appMachine = createMachine({
     "shapRef2": null,
     "count": 0,
     "color": "#ff8800",
-    keys: "q",
+    "keyA": 0,
+    "keyD": 0,
+    "keyW": 0,
+    "keyS": 0,
   },
   "initial": "home",
   "states": {
@@ -57,34 +60,26 @@ export const appMachine = createMachine({
         "type": "toggleColor"
       }
     },
-    "keydown": {
-      "actions": [
-        "changeKey",
-        // "logit"
-      ]
-    },
-    "keyup": {
-      "actions": [
-        "changeKey",
-        // "logit"
-      ]
-    },
     "getSnapShots": {
       "actions": {
         "params": {},
         "type": "logit"
       }
-    }
+    },
+    "keyA": {"actions": [assign({ keyA: 1000 }),]},
+    "Adown": {"actions": [ assign({ keyA: (context, event) => context.keyA - 50, }) ]},
+    "keyD": {"actions": [assign({ keyD: 1000 }),]},
+    "Ddown": {"actions": [ assign({ keyD: (context, event) => context.keyD - 50, }) ]},
+    "keyW": {"actions": [assign({ keyW: 1000 }),]},
+    "Wdown": {"actions": [ assign({ keyW: (context, event) => context.keyW - 50, }) ]},
+    "keyS": {"actions": [assign({ keyS: 1000 }),]},
+    "Sdown": {"actions": [ assign({ keyS: (context, event) => context.keyS - 50, }) ]},
   }
 }, {
       actions: {"getActorData": ({ context, event }) => {},
                 "toggleColor": assign({
                   color: ( context, event ) => context.color = context.color == "blue" ? 'red' : "blue"
                 }),
-                "changeKey": assign({
-                  keys: (context, event) => event.key
-                }),
-                "logit": (ctx, e) => console.log(ctx.keys, e)
               },
       actors: {},
       guards: {},
