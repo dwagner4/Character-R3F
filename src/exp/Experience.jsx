@@ -4,7 +4,7 @@ import { Knight } from '../models/knight/Knight.jsx'
 import { useControls } from "leva";
 import { FollowCamera } from '../components/FollowCamera.jsx'
 import { AppContext } from '../App.jsx'
-import { KeyboardMessenger } from "./KeyboardMessenger.jsx";
+import { KeyboardDebouncer } from "./KeyboardDebouncer.jsx";
 
 
 export const Experience = () => {
@@ -38,7 +38,7 @@ export const Experience = () => {
       <Environment preset="sunset" />
       <ambientLight intensity={5} />
       <FollowCamera camx={Camx} />
-      <KeyboardMessenger />
+      <KeyboardDebouncer />
 
       
       <mesh scale={5} rotation-x={-Math.PI * 0.5} position-y={0.001}>

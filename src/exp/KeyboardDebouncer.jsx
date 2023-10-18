@@ -5,8 +5,8 @@ import { AppContext } from '../App.jsx'
 import { useFrame } from "@react-three/fiber";
 
 
-export function KeyboardMessenger() 
-{
+export function KeyboardDebouncer() 
+{  
 
     const [ state, send ] = AppContext.useActor()
 
