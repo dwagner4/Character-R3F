@@ -4,15 +4,16 @@ import { Knight } from '../models/knight/Knight.jsx'
 import { useControls } from "leva";
 import { FollowCamera } from '../components/FollowCamera.jsx'
 import { AppContext } from '../App.jsx'
-import { KeyboardDebouncer } from "./KeyboardDebouncer.jsx";
+import { KeyboardControls1 } from "./KeyboardControls1.jsx";
 
 
 export const Experience = () => {
 
   const {animation, headFollow, cursorFollow, wireframe, Camx} = useControls({
     animation: {
-      value: "Run",
+      value: "Idle",
       options: [
+        "Idle",
         "Run", 
         "BackRun", 
         "Jump",
@@ -38,7 +39,7 @@ export const Experience = () => {
       <Environment preset="sunset" />
       <ambientLight intensity={5} />
       <FollowCamera camx={Camx} />
-      <KeyboardDebouncer />
+      <KeyboardControls1 />
 
       
       <mesh scale={5} rotation-x={-Math.PI * 0.5} position-y={0.001}>

@@ -30,8 +30,11 @@ export function Knight(props) {
   const { animations: slashAnimation } = useFBX("animations/Slash.fbx")
   slashAnimation[0].name ="Slash";
   // slashAnimation[0].blendMode = THREE.AdditiveAnimationBlendMode;
+  const { animations: idleAnimation } = useFBX("animations/SwordIdle.fbx")
+  idleAnimation[0].name ="Idle";
 
   const { ref, mixer, names, actions, clips } = useAnimations([
+                                        idleAnimation[0],
                                         runningAnimation[0], 
                                         backrunningAnimation[0], 
                                         jumpAnimation[0], 

@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 
 import React, { useContext } from 'react'
@@ -5,7 +6,7 @@ import { AppContext } from '../App.jsx'
 import { useFrame } from "@react-three/fiber";
 
 
-export function KeyboardDebouncer() 
+export function KeyboardControls1() 
 {  
 
     const [ state, send ] = AppContext.useActor()
@@ -16,6 +17,7 @@ export function KeyboardDebouncer()
         if (name === "d") {send({ type: "keyD" })}
         if (name === "w") {send({ type: "keyW" })}
         if (name === "s") {send({ type: "keyS" })}
+        console.log(name)
     };
 
     useEffect(() => {
@@ -28,7 +30,7 @@ export function KeyboardDebouncer()
       if (state.context.keyD > 0 ) { send({ type: "Ddown" }) } 
       if (state.context.keyW > 0 ) { send({ type: "Wdown" }) } 
       if (state.context.keyS > 0 ) { send({ type: "Sdown" }) } 
-      // console.log(state.context.keyA, state.context.keyD, state.context.keyW, state.context.keyS,)
+      console.log(state.context.keyA, state.context.keyD, state.context.keyW, state.context.keyS,)
       
     })
 
