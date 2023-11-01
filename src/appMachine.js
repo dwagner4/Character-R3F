@@ -1,9 +1,11 @@
 import { createMachine, assign, spawn } from 'xstate';
 import { cubeLogic } from './models/Cube.jsx'
+import { knightLogic, knightFunctions } from './models/knight/Knight.jsx'
 import { keys } from 'xstate/lib/utils.js';
 
 const cubeMachine1 = createMachine( cubeLogic )
 const cubeMachine2 = createMachine( cubeLogic )
+const knightMachine = createMachine( knightLogic, knightFunctions)
 
 export const appMachine = createMachine({
   predictableActionArguments: true,
@@ -12,6 +14,7 @@ export const appMachine = createMachine({
     "message": "no message",
     "shapeRef1": null,
     "shapRef2": null,
+    "knightRef": null,
     "count": 0,
     "color": "#ff8800",
     "keyA": 0,
@@ -28,6 +31,9 @@ export const appMachine = createMachine({
         }),
         assign({
           shapeRef2: () => spawn(cubeMachine2),
+        }),
+        assign({
+          knightRef: () => spawn(knightMachine ),
         }),
       ],
       "on": {
@@ -66,7 +72,7 @@ export const appMachine = createMachine({
         "type": "logit"
       }
     },
-    "keyA": {"actions": [assign({ keyA: 1000 }),]},
+    "keyA": {"actions": [assign({ keyA: 1000 }), "logit"]},
     "Adown": {"actions": [ assign({ keyA: (context, event) => context.keyA - 50, }) ]},
     "keyD": {"actions": [assign({ keyD: 1000 }),]},
     "Ddown": {"actions": [ assign({ keyD: (context, event) => context.keyD - 50, }) ]},
@@ -80,6 +86,8 @@ export const appMachine = createMachine({
                 "toggleColor": assign({
                   color: ( context, event ) => context.color = context.color == "blue" ? 'red' : "blue"
                 }),
+                "logit": ( context, event ) => console.log(event),
+                "logA": (context, evnet) => console.log(context)
               },
       actors: {},
       guards: {},

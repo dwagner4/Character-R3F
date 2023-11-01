@@ -8,6 +8,7 @@ import * as React from 'react';
 import { appMachine } from './appMachine.js'
 import { createActorContext } from '@xstate/react'
 
+//  create all FSM actors
 export const AppContext = createActorContext(appMachine)
 
 function App() {
