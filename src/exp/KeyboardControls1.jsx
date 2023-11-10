@@ -1,13 +1,9 @@
 
 import { useEffect, useState, useRef } from "react";
-
-import React, { useContext } from 'react'
-import { AppContext } from '../App.jsx'
-import { useFrame } from "@react-three/fiber";
-
 import { createMachine, assign } from 'xstate';
 import { useMachine } from '@xstate/react'
 
+import { AppContext } from '../App.jsx'
 
 export function KeyboardControls1() 
 {  
@@ -18,62 +14,33 @@ export function KeyboardControls1()
     "context": { mystuff: 100},
     "initial": "idle",
     "context": {
-      "keyA": false,
-      "keyD": false,
-      "keyW": false,
-      "keyS": false,
+      "KeyA": false,
+      "KeyD": false,
+      "KeyW": false,
+      "KeyS": false,
     },
     "states": {
       idle: {}
     },
     on: {
-      "keyA": {"actions": [assign({ keyA: true })]},
-      "Adown": {"actions": [ assign({ keyA: false})]},
-      "keyD": {"actions": [assign({ keyD: true }), ]},
-      "Ddown": {"actions": [ assign({ keyD: false})]},
-      "keyW": {"actions": [assign({ keyW: true }),]},
-      "Wdown": {"actions": [ assign({ keyW: false})]},
-      "keyS": {"actions": [assign({ keyS: true }),]},
-      "Sdown": {"actions": [ assign({ keyS: false})]},
+      "KeyA": {"actions": [assign({ KeyA: true })]},
+      "Adown": {"actions": [ assign({ KeyA: false})]},
+      "KeyD": {"actions": [assign({ KeyD: true }), ]},
+      "Ddown": {"actions": [ assign({ KeyD: false})]},
+      "KeyW": {"actions": [assign({ KeyW: true }),]},
+      "Wdown": {"actions": [ assign({ KeyW: false})]},
+      "KeyS": {"actions": [assign({ KeyS: true }),]},
+      "Sdown": {"actions": [ assign({ KeyS: false})]},
     },
     "predictableActionArguments": true,
     "preserveActionOrder": true
-  }, {
-    actions: {"getActorData": ({ context, event }) => {},
-                "toggleColor": assign({
-                  color: ( context, event ) => context.color = context.color == "blue" ? 'red' : "blue"
-                }),
-                "logit": ( context, event ) => console.log(event),
-                "logA": (context, evnet) => console.log(context)
-              },
-      actors: {},
-      guards: {},
-      delays: {},
-  }))
+  }, ))
 
-  const keyDownFunc = (e) => {
-      var name = e.code;
-      if (name === "KeyA") {
-        if (!localstate.context.keyA){
-          localsend({ type: "keyA" })
-        }
-      }
-      if (name === "KeyD") {
-        if (!localstate.context.keyD){
-          localsend({ type: "keyD" })
-        }
-      }
-      if (name === "KeyS") {
-        if (!localstate.context.keyS){
-          localsend({ type: "keyS" })
-        }
-      }
-      if (name === "KeyW") {
-        if (!localstate.context.keyW){
-          localsend({ type: "keyW" })
-        }
-      }
-      // console.log(name, "down")
+  const KeyDownFunc = (e) => {
+    const name = e.code;
+    if (!localstate.context[name]) {
+       localsend({ type: name })
+    }
   };  
 
   const keyUpFunc = (e) => {
@@ -87,24 +54,20 @@ export function KeyboardControls1()
 
 
   useEffect(() => {
-    document.addEventListener('keydown', keyDownFunc, true)
+    document.addEventListener('keydown', KeyDownFunc, true)
     document.addEventListener('keyup', keyUpFunc, true)
     // document.addEventListener('mousemove', (e) => console.log(e), true)
   }, [])
 
   useEffect(() => {
-    console.log("Fuck You")
-  }, [localstate.context])
-
-  useFrame(() => {
-    // console.log(state.context)
-    // if (localstate.context.keyA > 0 ) { localsend({ type: "Adown" });} 
-    // if (localstate.context.keyD > 0 ) { localsend({ type: "Ddown" }) } 
-    // if (localstate.context.keyW > 0 ) { localsend({ type: "Wdown" }) } 
-    // if (localstate.context.keyS > 0 ) { localsend({ type: "Sdown" }) } 
-    console.log(localstate.context.keyA, localstate.context.keyS, localstate.context.keyW, localstate.context.keyD)
-    
-  })
+    // console.log( localstate.context)
+    send({type: "KEYBOARD", data: localstate.context})
+  }, [
+    localstate.context.KeyA,
+    localstate.context.KeyD,
+    localstate.context.KeyW,
+    localstate.context.KeyS,
+  ])
 
     return ( <></> )
 }
