@@ -5,6 +5,7 @@ import { useControls } from "leva";
 import { FollowCamera } from '../components/FollowCamera.jsx'
 import { AppContext } from '../App.jsx'
 import { KeyboardControls1 } from "./KeyboardControls1.jsx";
+import { OrbitControls } from '@react-three/drei'
 
 
 export const Experience = () => {
@@ -40,6 +41,8 @@ export const Experience = () => {
       <ambientLight intensity={5} />
       <FollowCamera camx={Camx} />
       <KeyboardControls1 />
+
+      <OrbitControls makeDefault />
 
       
       <mesh scale={5} rotation-x={-Math.PI * 0.5} position-y={0.001}>

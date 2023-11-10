@@ -18,23 +18,23 @@ export function KeyboardControls1()
     "context": { mystuff: 100},
     "initial": "idle",
     "context": {
-      "keyA": 0,
-      "keyD": 0,
-      "keyW": 0,
-      "keyS": 0,
+      "keyA": false,
+      "keyD": false,
+      "keyW": false,
+      "keyS": false,
     },
     "states": {
       idle: {}
     },
     on: {
-      "keyA": {"actions": [assign({ keyA: 1000 })]},
-      "Adown": {"actions": [ assign({ keyA: (context, event) => context.keyA - 50, })]},
-      "keyD": {"actions": [assign({ keyD: 1000 }), ]},
-      "Ddown": {"actions": [ assign({ keyD: (context, event) => context.keyD - 50, }) ]},
-      "keyW": {"actions": [assign({ keyW: 1000 }),]},
-      "Wdown": {"actions": [ assign({ keyW: (context, event) => context.keyW - 50, }) ]},
-      "keyS": {"actions": [assign({ keyS: 1000 }),]},
-      "Sdown": {"actions": [ assign({ keyS: (context, event) => context.keyS - 50, }) ]},
+      "keyA": {"actions": [assign({ keyA: true })]},
+      "Adown": {"actions": [ assign({ keyA: false})]},
+      "keyD": {"actions": [assign({ keyD: true }), ]},
+      "Ddown": {"actions": [ assign({ keyD: false})]},
+      "keyW": {"actions": [assign({ keyW: true }),]},
+      "Wdown": {"actions": [ assign({ keyW: false})]},
+      "keyS": {"actions": [assign({ keyS: true }),]},
+      "Sdown": {"actions": [ assign({ keyS: false})]},
     },
     "predictableActionArguments": true,
     "preserveActionOrder": true
@@ -53,25 +53,55 @@ export function KeyboardControls1()
 
   const keyDownFunc = (e) => {
       var name = e.code;
-      if (name === "KeyA") {localsend({ type: "keyA" })}
-      if (name === "KeyD") {localsend({ type: "keyD" })}
-      if (name === "KeyW") {localsend({ type: "keyW" })}
-      if (name === "KeyS") {localsend({ type: "keyS" })}
-      console.log(name)
+      if (name === "KeyA") {
+        if (!localstate.context.keyA){
+          localsend({ type: "keyA" })
+        }
+      }
+      if (name === "KeyD") {
+        if (!localstate.context.keyD){
+          localsend({ type: "keyD" })
+        }
+      }
+      if (name === "KeyS") {
+        if (!localstate.context.keyS){
+          localsend({ type: "keyS" })
+        }
+      }
+      if (name === "KeyW") {
+        if (!localstate.context.keyW){
+          localsend({ type: "keyW" })
+        }
+      }
+      // console.log(name, "down")
   };  
+
+  const keyUpFunc = (e) => {
+    var name = e.code;
+    if (name === "KeyA") {localsend({ type: "Adown" })}
+    if (name === "KeyD") {localsend({ type: "Ddown" })}
+    if (name === "KeyW") {localsend({ type: "Wdown" })}
+    if (name === "KeyS") {localsend({ type: "Sdown" })}
+    // console.log(name, "up")
+};  
 
 
   useEffect(() => {
     document.addEventListener('keydown', keyDownFunc, true)
+    document.addEventListener('keyup', keyUpFunc, true)
     // document.addEventListener('mousemove', (e) => console.log(e), true)
   }, [])
 
+  useEffect(() => {
+    console.log("Fuck You")
+  }, [localstate.context])
+
   useFrame(() => {
     // console.log(state.context)
-    if (localstate.context.keyA > 0 ) { localsend({ type: "Adown" });} 
-    if (localstate.context.keyD > 0 ) { localsend({ type: "Ddown" }) } 
-    if (localstate.context.keyW > 0 ) { localsend({ type: "Wdown" }) } 
-    if (localstate.context.keyS > 0 ) { localsend({ type: "Sdown" }) } 
+    // if (localstate.context.keyA > 0 ) { localsend({ type: "Adown" });} 
+    // if (localstate.context.keyD > 0 ) { localsend({ type: "Ddown" }) } 
+    // if (localstate.context.keyW > 0 ) { localsend({ type: "Wdown" }) } 
+    // if (localstate.context.keyS > 0 ) { localsend({ type: "Sdown" }) } 
     console.log(localstate.context.keyA, localstate.context.keyS, localstate.context.keyW, localstate.context.keyD)
     
   })
