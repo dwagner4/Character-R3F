@@ -72,14 +72,9 @@ export const appMachine = createMachine({
         "type": "logit"
       }
     },
-    "keyA": {"actions": [assign({ keyA: 1000 }), "logit"]},
-    "Adown": {"actions": [ assign({ keyA: (context, event) => context.keyA - 50, }) ]},
-    "keyD": {"actions": [assign({ keyD: 1000 }),]},
-    "Ddown": {"actions": [ assign({ keyD: (context, event) => context.keyD - 50, }) ]},
-    "keyW": {"actions": [assign({ keyW: 1000 }),]},
-    "Wdown": {"actions": [ assign({ keyW: (context, event) => context.keyW - 50, }) ]},
-    "keyS": {"actions": [assign({ keyS: 1000 }),]},
-    "Sdown": {"actions": [ assign({ keyS: (context, event) => context.keyS - 50, }) ]},
+    "KEYBOARD": {actions: [
+      (context, event) => console.log(event)
+    ]},
   }
 }, {
       actions: {"getActorData": ({ context, event }) => {},

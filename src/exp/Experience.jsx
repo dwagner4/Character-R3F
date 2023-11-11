@@ -40,7 +40,7 @@ export const Experience = () => {
       <Environment preset="sunset" />
       <ambientLight intensity={5} />
       <FollowCamera camx={Camx} />
-      <KeyboardControls1 />
+      <KeyboardControls1 activekeys={{ KeyA: false, KeyD: false, KeyS: false, KeyW: false }}/>
 
       <OrbitControls makeDefault />
 
