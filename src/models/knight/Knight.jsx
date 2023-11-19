@@ -6,19 +6,25 @@ import React, { useEffect, useRef, useContext } from "react";
 import * as THREE from "three";
 import { useGLTF, useFBX, useAnimations } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { createMachine, assign } from 'xstate';
 
 import { AppContext } from '../../App.jsx'
 
 
 
 
+
 export function Knight(props) {
-  const {animation, headfollow, cursorfollow, wireframe} = props;
+  const { animation, headfollow, cursorfollow, wireframe } = props;
+
+  let animationVariable = animation
 
   /* Get references to the parent appMachine and the Knight Actor FSM */
   const appActor = AppContext.useActorRef()
   const fsmRef = AppContext.useSelector((state) => state.context.knightRef)
-  
+
+
+
 
 
 
@@ -28,58 +34,69 @@ export function Knight(props) {
   const { nodes, materials, animations } = useGLTF("models/knightTPose.glb");
 
   const { animations: runningAnimation } = useFBX("animations/Run.fbx")
-  runningAnimation[0].name ="Run";
+  runningAnimation[0].name = "Run";
   // runningAnimation[0].blendMode = THREE.AdditiveAnimationBlendMode;
   const { animations: backrunningAnimation } = useFBX("animations/BackRun.fbx")
-  backrunningAnimation[0].name ="BackRun";
+  backrunningAnimation[0].name = "BackRun";
   const { animations: jumpAnimation } = useFBX("animations/Jump.fbx")
-  jumpAnimation[0].name ="Jump";
+  jumpAnimation[0].name = "Jump";
   const { animations: impactAnimation } = useFBX("animations/Impact.fbx")
-  impactAnimation[0].name ="Impact";
+  impactAnimation[0].name = "Impact";
   const { animations: shieldimpactAnimation } = useFBX("animations/ShieldImpact.fbx")
-  shieldimpactAnimation[0].name ="ShieldImpact";
+  shieldimpactAnimation[0].name = "ShieldImpact";
   const { animations: shieldblockAnimation } = useFBX("animations/ShieldBlock.fbx")
-  shieldblockAnimation[0].name ="ShieldBlock";
+  shieldblockAnimation[0].name = "ShieldBlock";
   const { animations: shieldturnAnimation } = useFBX("animations/ShieldTurn.fbx")
-  shieldturnAnimation[0].name ="ShieldTurn";
+  shieldturnAnimation[0].name = "ShieldTurn";
   const { animations: slashAnimation } = useFBX("animations/Slash.fbx")
-  slashAnimation[0].name ="Slash";
+  slashAnimation[0].name = "Slash";
   // slashAnimation[0].blendMode = THREE.AdditiveAnimationBlendMode;
   const { animations: idleAnimation } = useFBX("animations/SwordIdle.fbx")
-  idleAnimation[0].name ="Idle";
+  idleAnimation[0].name = "Idle";
 
   const { ref, mixer, names, actions, clips } = useAnimations([
-                                        idleAnimation[0],
-                                        runningAnimation[0], 
-                                        backrunningAnimation[0], 
-                                        jumpAnimation[0], 
-                                        impactAnimation[0], 
-                                        shieldimpactAnimation[0],
-                                        shieldblockAnimation[0],
-                                        shieldturnAnimation[0],
-                                        slashAnimation[0]
-                                    ], 
+    idleAnimation[0],
+    runningAnimation[0],
+    backrunningAnimation[0],
+    jumpAnimation[0],
+    impactAnimation[0],
+    shieldimpactAnimation[0],
+    shieldblockAnimation[0],
+    shieldturnAnimation[0],
+    slashAnimation[0]
+  ],
     group);
 
   console.log(clips)
 
-  useFrame((state) => {
-    if(headfollow) {
+  useFrame((state, delta) => {
+    if (headfollow) {
       group.current.getObjectByName("mixamorigHead").lookAt(state.camera.position);
     }
-    if (cursorfollow) 
-    {
+    if (cursorfollow) {
       const target = new THREE.Vector3(state.mouse.x, state.mouse.y, 1)
       group.current.getObjectByName("mixamorigSpine2").lookAt(target);
     }
+    if (fsmRef.state.context.turnLeft) {
+      console.log("WTF")
+      group.current.rotation.z += delta * 1
+    }
+    if (fsmRef.state.context.turnRight) {
+      group.current.rotation.z -= delta * 1
+    }
+    if (fsmRef.state.context.speed != 0) {
+      group.current.position.x += delta * fsmRef.state.context.speed
+    }
+    // console.log(fsmRef.state.context)
   })
 
   useEffect(() => {
-    actions[animation].reset().fadeIn(0.5).play();
+    const aaa = fsmRef.state.animationName || 'Idle'
+    actions[aaa].reset().fadeIn(0.5).play();
     return () => {
-      actions[animation].reset().fadeOut(0.5)
+      actions[aaa].reset().fadeOut(0.5)
     }
-  }, [animation])
+  }, [fsmRef.state.animationName])
 
   useEffect(() => {
     Object.values(materials).forEach((material) => {
@@ -124,36 +141,73 @@ export function Knight(props) {
 
 export const knightLogic = {
   "id": "knight",
-  "context": { mystuff: 100},
   "initial": "idle",
-  "context": {},
+  "context": {
+    keys: {},
+    turnLeft: false,
+    turnRight: false,
+    walk: false,
+    jump: false,
+    animationName: 'Idle',
+    direction: {},
+    speed: 0
+  },
   "states": {
     "idle": {
-      entry:{actions: ["logit"]},
+      entry: { actions: ["logit"] },
       on: {
         "WALK": { target: "walk" },
         "STRIKE": { target: "strike" },
       }
     },
     "walk": {
-      entry:{actions: ["logit"]},
+      entry: { actions: ["logit"] },
       on: {
         "RUN": { target: "run" },
         "IDLE": { target: "idle" },
       }
     },
     "run": {
-      entry:{actions: ["logit"]},
+      entry: { actions: ["logit"] },
       on: {
         "WALK": { target: "walk" },
       }
     },
     "strike": {
-      entry:{actions: ["logit"]},
+      entry: { actions: ["logit"] },
       on: {
         "IDLE": { target: "idle" },
       }
     },
+  },
+  on: {
+    'KEYBOARD': {
+      actions: [
+        assign((context, event) => {
+          const a = event.data.KeyA
+          const d = event.data.KeyD
+          const w = event.data.KeyW
+          const s = event.data.KeyS
+          const ss = w - s
+          console.log(event.data, context)
+          return {
+            turnLeft: a,
+            turnRight: d,
+            speed: ss,
+          }
+        })
+      ],
+    },
+    'INIT': {
+      actions: [
+        assign((context, event) => {
+          console.log(event)
+          return {
+            animationName: event.name
+          }
+        })
+      ]
+    }
   },
   "predictableActionArguments": true,
   "preserveActionOrder": true
@@ -161,9 +215,9 @@ export const knightLogic = {
 
 export const knightFunctions = {
   actions: {
-    "logit": (context, event) => { 
+    "logit": (context, event) => {
       console.log(context, event)
-    }, 
+    },
   },
   services: {},
   guards: {},

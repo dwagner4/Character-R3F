@@ -73,7 +73,7 @@ export const appMachine = createMachine({
       }
     },
     "KEYBOARD": {actions: [
-      (context, event) => console.log(event)
+      (context, event) => context.knightRef.send( {type: 'KEYBOARD', data: event.data} )
     ]},
   }
 }, {
